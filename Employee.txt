@@ -1,0 +1,42 @@
+sudo systemctl start mongodb
+sudo systemctl enable mongodb
+
+mongosh
+
+use CompanyDB
+db.createCollection("Employees")
+
+db.Employees.insertOne({
+emp_id: "EMP001",
+name: "Priya Desai",
+department: "HR",
+designation: "Manager",
+salary: 65000
+})
+db.Employees.insertMany([
+{
+emp_id: "EMP002",
+name: "Ankit Verma",
+department: "IT",
+designation: "Developer",
+salary: 72000
+},
+{
+emp_id: "EMP003",
+name: "Ritika Shah",
+department: "Finance",
+designation: "Analyst",
+salary: 58000
+}
+])
+
+db.Employees.find().pretty()
+
+db.Employees.find({ salary: { $gt: 60000 } })
+
+db.Employees.updateOne(
+{ emp_id: "EMP002" },
+{ $set: { designation: "Senior Developer" } }
+)
+
+db.Employees.deleteOne({ emp_id: "EMP003" })
