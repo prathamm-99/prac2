@@ -1,0 +1,42 @@
+sudo systemctl start mongodb
+sudo systemctl enable mongodb
+
+mongosh
+
+use CollegeDB // Switch to (or create) database
+db.createCollection("Students") // Create collection
+
+db.Students.insertOne({
+roll_no: "CSE1001",
+name: "Ravi Sharma",
+branch: "CSE",
+year: 2,
+marks: 88
+})
+db.Students.insertMany([
+{
+roll_no: "CSE1002",
+name: "Sneha Patil",
+branch: "CSE",
+year: 2,
+marks: 91
+},
+{
+roll_no: "CSE1003",
+name: "Amit Verma",
+branch: "IT",
+year: 1,
+marks: 76
+}
+])
+
+db.Students.find().pretty()
+
+db.Students.find({ marks: { $gt: 80 } })
+
+db.Students.updateOne(
+{ roll_no: "CSE1001" },
+{ $set: { marks: 90 } }
+)
+
+db.Students.deleteOne({ roll_no: "CSE1003" })
