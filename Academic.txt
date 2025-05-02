@@ -1,0 +1,67 @@
+sudo systemctl start mongodb
+sudo systemctl enable mongodb
+
+mongosh
+
+use CollegeDB
+db.createCollection("Students")
+
+db.Students.insertMany([
+{
+roll_no: "S001",
+name: "Ananya Joshi",
+department: "Computer",
+semester: 4,
+marks: 85,
+grade: "A"
+},
+{
+roll_no: "S002",
+name: "Raj Mehta",
+department: "Mechanical",
+semester: 4,
+marks: 78,
+grade: "B"
+},
+{
+roll_no: "S003",
+name: "Sneha Patil",
+department: "Computer",
+semester: 4,
+marks: 92,
+grade: "A+"
+},
+{
+roll_no: "S004",
+name: "Ishaan Kulkarni",
+department: "Electronics",
+semester: 4,
+marks: 69,
+grade: "C"
+}
+])
+
+db.Students.find().pretty()
+db.Students.find({ department: "Computer" })
+
+db.Students.updateOne(
+{ roll_no: "S002" },
+{ $set: { grade: "B+" } }
+)
+
+db.Students.deleteOne({ roll_no: "S004" })
+
+db.Students.find().sort({ marks: -1 })
+
+db.Students.find({}, { name: 1, marks: 1, _id: 0 })
+
+db.Students.find().sort({ marks: -1 }).limit(2)
+
+db.Students.aggregate([
+{
+$group: {
+_id: "$department",
+}
+])
+}
+avg_marks: { $avg: "$marks" }
