@@ -1,0 +1,66 @@
+sudo systemctl start mongodb
+sudo systemctl enable mongodb
+
+mongosh
+
+db.createCollection("Products")
+
+db.Products.insertMany([
+{
+product_id: "P001",
+name: "Wireless Mouse",
+category: "Electronics",
+price: 599,
+stock: 120,
+rating: 4.3
+},
+{
+product_id: "P002",
+name: "Bluetooth Speaker",
+category: "Electronics",
+price: 1299,
+stock: 60,
+rating: 4.6
+},
+{
+product_id: "P003",
+name: "Yoga Mat",
+category: "Fitness",
+price: 799,
+stock: 45,
+rating: 4.1
+},
+{
+product_id: "P004",
+name: "Laptop Stand",
+category: "Accessories",
+price: 999,
+stock: 35,
+rating: 4.0
+}
+])
+
+db.Products.find().pretty()
+db.Products.find({ category: "Electronics" })
+
+db.Products.updateOne(
+{ product_id: "P003" },
+{ $inc: { stock: 10 } }
+)
+
+db.Products.deleteOne({ product_id: "P004" })
+
+db.Products.find().sort({ price: -1 })
+
+db.Products.find({}, { name: 1, price: 1, _id: 0 })
+
+db.Products.find().sort({ rating: -1 }).limit(2)
+
+db.Products.aggregate([
+{
+$group: {
+_id: "$category",
+average_price: { $avg: "$price" }
+}
+}
+])
