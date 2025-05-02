@@ -1,0 +1,47 @@
+import pandas as pd
+from sklearn.model_selection import train_test_split
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.metrics import accuracy_score, classification_report, confusion_matrix
+from sklearn.preprocessing import LabelEncoder
+import seaborn as sns
+import matplotlib.pyplot as plt
+
+df = pd.read_csv('car_evaluation.csv', names=['buying', 'maint', 'doors', 'lug_boot', 'safety', 'class'])
+
+# Encoding all the string data
+df = df.apply(LabelEncoder().fit_transform)
+
+
+# Define features (X) and target variable (y) using column names
+X = df.drop(columns=['class'])  # Drop the target column from the features
+y = df['class'].astype(str)  # Select the target column
+
+# Split the dataset into training and testing sets (80% train, 20% test)
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+# Create a Random Forest Classifier
+model = RandomForestClassifier(n_estimators=100, random_state=42)
+# Train the classifier on the training data
+model.fit(X_train, y_train)
+
+# Make predictions on the test data
+y_pred = model.predict(X_test)
+
+# Evaluate the model
+accuracy = accuracy_score(y_test, y_pred)
+print('Accuracy:',accuracy)
+
+confusion = confusion_matrix(y_test, y_pred)
+print("\nConfusion Matrix:\n", confusion)
+
+classification_rep = classification_report(y_test, y_pred)
+print("\nClassification Report:\n", classification_rep)
+
+feature_scores = pd.Series(model.feature_importances_, index=X.columns).sort_values(ascending=False)
+# Plot feature importance
+plt.figure(figsize=(10, 6))
+sns.barplot(x=feature_scores, y=feature_scores.index)
+plt.xlabel('Feature Importance Score')
+plt.ylabel('Features')
+plt.title("Visualizing Important Features")
+plt.show()
